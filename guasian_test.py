@@ -51,22 +51,23 @@ def random_name():
       import string
 
       randname = gen.gen_word()
+
+      #  up to for words in a name
       for i in range(0, random.randint(0, 3)):
             randname=f"{randname} {gen.gen_word()}"
 
+      # strip any junk chars
       valid_chars = "-_ %s%s" % (string.ascii_letters, string.digits)
       return ''.join(c for c in randname if c in valid_chars)
 
 
-
+# create some folders
 for index in range(0, NUM_FOLDERS):
       folder_name = random_name()
       folder_tree.append({"type":directory_type, "name":folder_name, "contents":[]})
 
 
 import numpy as np
-
-total_storage = 1024
 
 # generate a distirbution leaning more towards larger proportion files
 mu, sigma = 0.75, 0.1 # mean and standard deviation
@@ -86,8 +87,7 @@ for i in range(1,len(folder_tree)):
       moving_folder = folder_tree.pop()
       random.choice(folder_tree)["contents"].append(moving_folder)
 
-print(folder_tree)
-
+# write out the files
 import os
 
 def writeout(file_path, file_name, file_size):
@@ -98,7 +98,7 @@ def writeout(file_path, file_name, file_size):
             fout.write(os.urandom(file_size))
             
 
-
+# iterating write function
 def iter_dir(root, dir_contents):
       for item in dir_contents:
             if item["type"] == file_type:
@@ -107,5 +107,6 @@ def iter_dir(root, dir_contents):
                   path = f"{root}/{item['name']}"
                   iter_dir(path, item["contents"])
 
+# call the iterating write function
 iter_dir("", folder_tree)                  
 
