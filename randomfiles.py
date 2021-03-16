@@ -91,11 +91,18 @@ for i in range(1,len(folder_tree)):
 import os
 
 def writeout(file_path, file_name, file_size):
-      print(f"{file_path}/{file_name} ({file_size} bytes)")
+      # print(f"{file_path}/{file_name} ({file_size} bytes)")
+
       if not os.path.exists(file_path):
-            os.makedirs(file_path)
-      with open(f"{file_path}/{file_name}", 'wb') as fout:
-            fout.write(os.urandom(file_size))
+            try:
+                  os.makedirs(file_path)
+            except FileNotFoundError as e:
+                  print(f"ERROR {file_path} could not be created!")
+      try: 
+            with open(f"{file_path}/{file_name}", 'wb') as fout:
+                  fout.write(os.urandom(file_size))
+      except FileNotFoundError as e:
+            print(f"ERROR {file_path}/{file_name} not found")
             
 
 # iterating write function
